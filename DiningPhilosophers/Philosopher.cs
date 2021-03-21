@@ -1,24 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace DiningPhilosophers
 {
+    /// <summary>
+    /// Represents a philosopher.
+    /// </summary>
     class Philosopher
     {
+        /// <summary>
+        /// X coordinate for console.
+        /// </summary>
         private readonly int _x;
+
+        /// <summary>
+        /// Y coordinate for console.
+        /// </summary>
         private readonly int _y;
 
+        /// <summary>
+        /// X coordinate for console.
+        /// </summary>
         private readonly Stick _stickA;
+
+        /// <summary>
+        /// Neighboring stick with the greatest number.
+        /// </summary>
         private readonly Stick _stickB;
 
+        /// <summary>
+        /// Locker for the cursor position.
+        /// </summary>
         private static object _consoleLocker = new object();
 
-        Thread _thread;
+        /// <summary>
+        /// Thread for actions of lunch.
+        /// </summary>
+        Thread _lunchThread;
 
+        /// <summary>
+        /// Represents a philosopher.
+        /// </summary>
+        /// <param name="x">X coordinate for console.</param>
+        /// <param name="y">Y coordinate for console.</param>
+        /// <param name="stickA">X coordinate for console.</param>
+        /// <param name="stickB">Neighboring stick with the greatest number.</param>
         public Philosopher(int x, int y, Stick stickA, Stick stickB)
         {
             _x = x;
@@ -28,17 +54,26 @@ namespace DiningPhilosophers
             _stickB = stickB;
         }
 
+        /// <summary>
+        /// Animate the philosopher.
+        /// </summary>
         public void Initial()
         {
-            _thread = new Thread(new ThreadStart(Lunch));
-            _thread.Start();
+            _lunchThread = new Thread(new ThreadStart(Lunch));
+            _lunchThread.Start();
         }
 
+        /// <summary>
+        /// Actions for waking up.
+        /// </summary>
         public void WakeUp()
         {
             PrintPhilosopher("(O_O)");
         }
 
+        /// <summary>
+        /// Actions for eating.
+        /// </summary>
         public void Eat()
         {
             _stickA.Get();
@@ -53,7 +88,10 @@ namespace DiningPhilosophers
             _stickA.PutAside();
         }
 
-        public void Sleep()
+        /// <summary>
+        /// Actions for thinking.
+        /// </summary>
+        public void Think()
         {
             PrintPhilosopher("(-_-)");
 
@@ -61,6 +99,10 @@ namespace DiningPhilosophers
             Thread.Sleep(random.Next(5000, 10000));
         }
 
+        /// <summary>
+        /// Print the philosopher on the console.
+        /// </summary>
+        /// <param name="philosopherImage">Philosopher's image.</param>
         private void PrintPhilosopher(string philosopherImage)
         {
             Monitor.Enter(_consoleLocker);
@@ -71,11 +113,14 @@ namespace DiningPhilosophers
             Monitor.Exit(_consoleLocker);
         }
 
+        /// <summary>
+        /// A cycle thinking, waking up, eating.
+        /// </summary>
         private void Lunch()
         {
             while (true)
             {
-                Sleep();
+                Think();
                 WakeUp();
                 Eat();
             }

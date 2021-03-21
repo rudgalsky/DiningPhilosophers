@@ -1,23 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace DiningPhilosophers
 {
+    /// <summary>
+    /// Main class
+    /// </summary>
     class Program
     {
+        /// <summary>
+        /// List of philosophers.
+        /// </summary>
         private static List<Philosopher> _philosophers;
 
+        /// <summary>
+        /// List of sticks.
+        /// </summary>
         private static List<Stick> _sticks;
 
+        /// <summary>
+        /// Start entry point.
+        /// </summary>
+        /// <param name="args">Arguments.</param>
         static void Main(string[] args)
-        {
-            PrepareConsole();
-
-            Console.ReadKey();
-        }
-
-        private static void PrepareConsole()
         {
             _sticks = new List<Stick>
             {
@@ -42,6 +47,8 @@ namespace DiningPhilosophers
             {
                 philosopher.Initial();
             }
+
+            Console.ReadKey();
         }
     }
 }
