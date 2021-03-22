@@ -59,7 +59,7 @@ namespace DiningPhilosophers
         /// </summary>
         public void Initial()
         {
-            _lunchThread = new Thread(new ThreadStart(Lunch));
+            _lunchThread = new Thread(DoLifeCycle);
             _lunchThread.Start();
         }
 
@@ -74,7 +74,7 @@ namespace DiningPhilosophers
         /// <summary>
         /// Actions for eating.
         /// </summary>
-        public void Eat()
+        private void Eat()
         {
             _stickA.Get();
             _stickB.Get();
@@ -91,7 +91,7 @@ namespace DiningPhilosophers
         /// <summary>
         /// Actions for thinking.
         /// </summary>
-        public void Think()
+        private void Think()
         {
             PrintPhilosopher("(-_-)");
 
@@ -105,18 +105,17 @@ namespace DiningPhilosophers
         /// <param name="philosopherImage">Philosopher's image.</param>
         private void PrintPhilosopher(string philosopherImage)
         {
-            Monitor.Enter(_consoleLocker);
-
-            Console.SetCursorPosition(_x, _y);
-            Console.Write(philosopherImage);
-
-            Monitor.Exit(_consoleLocker);
+            lock (_consoleLocker)
+            {
+                Console.SetCursorPosition(_x, _y);
+                Console.Write(philosopherImage);
+            }
         }
 
         /// <summary>
         /// A cycle thinking, waking up, eating.
         /// </summary>
-        private void Lunch()
+        private void DoLifeCycle()
         {
             while (true)
             {
